@@ -6,7 +6,7 @@
 /*   By: yingzhan <yingzhan@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 17:54:47 by yingzhan          #+#    #+#             */
-/*   Updated: 2025/11/13 13:05:25 by yingzhan         ###   ########.fr       */
+/*   Updated: 2025/11/13 17:25:02 by yingzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,106 @@ std::ostream&	operator<<(std::ostream &os, const Fixed& fixed)
 {
 	os << fixed.toFloat();
 	return (os);
+}
+
+bool	Fixed::operator>(const Fixed& other)const
+{
+	return (_rawValue > other._rawValue);
+}
+
+bool	Fixed::operator<(const Fixed& other)const
+{
+	return (_rawValue < other._rawValue);
+}
+
+bool	Fixed::operator>=(const Fixed& other)const
+{
+	return (_rawValue >= other._rawValue);
+}
+
+bool	Fixed::operator<=(const Fixed& other)const
+{
+	return (_rawValue <= other._rawValue);
+}
+
+bool	Fixed::operator==(const Fixed& other)const
+{
+	return (_rawValue == other._rawValue);
+}
+
+bool	Fixed::operator!=(const Fixed& other)const
+{
+	return (_rawValue != other._rawValue);
+}
+
+Fixed	Fixed::operator+(const Fixed& other)const
+{
+	Fixed	result;
+
+	result.setRawBits(this->_rawValue + other._rawValue);
+	return (result);
+}
+
+Fixed	Fixed::operator-(const Fixed& other)const
+{
+	Fixed	result;
+
+	result.setRawBits(this->_rawValue - other._rawValue);
+	return (result);
+}
+
+//Using long avoid overflow
+Fixed	Fixed::operator*(const Fixed& other)const
+{
+	long	multiply = (long)this->_rawValue * (long)other._rawValue;
+	Fixed	result;
+	result.setRawBits(static_cast<int>(multiply >> _FracBits));
+	return (result);
+}
+
+//Have to right shift first otherwise losing precision
+Fixed	Fixed::operator/(const Fixed& other)const
+{
+	long	divide;
+	if (other._rawValue)
+	{
+		divide = ((long)this->_rawValue << _FracBits) / (long)other._rawValue;
+		Fixed	result;
+		result.setRawBits(static_cast<int>(divide));
+		return (result);
+	}
+	else
+		return (Fixed(0));
+}
+
+//_rawValue ± 1 = realvalue ± 1/256(ϵ)
+//pre-increment
+Fixed&	Fixed::operator++()
+{
+	if (_rawValue < std::numeric_limits<int>::max())
+	_rawValue++;
+	return (*this);
+}
+
+//post-increment
+Fixed	Fixed::operator++(int)
+{
+	Fixed	tmp(*this);
+	_rawValue++;
+	return (tmp);
+}
+
+//pre-decrement
+Fixed&	Fixed::operator--()
+{
+	_rawValue--;
+	return (*this);
+}
+
+//post-decrement
+Fixed	Fixed::operator--(int)
+{
+	Fixed	tmp(*this);
+	_rawValue--;
+	return (tmp);
 }
