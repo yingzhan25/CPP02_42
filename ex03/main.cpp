@@ -5,28 +5,30 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yingzhan <yingzhan@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/11 18:20:02 by yingzhan          #+#    #+#             */
-/*   Updated: 2025/11/14 13:18:44 by yingzhan         ###   ########.fr       */
+/*   Created: 2025/11/14 17:04:59 by yingzhan          #+#    #+#             */
+/*   Updated: 2025/11/14 17:22:10 by yingzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Fixed.hpp"
+#include "Point.hpp"
 #include <iostream>
 
 int	main(void)
 {
-	Fixed	a;
-	Fixed const	b(Fixed(5.05f) * Fixed(2));
+	Point	a(0.0f, 0.0f);
+	Point	b(1.0f, 0.0f);
+	Point	c(0.0f, 1.0f);
 
-	std::cout << a << std::endl;
-	std::cout << ++a << std::endl;
-	std::cout << a << std::endl;
-	std::cout << a++ << std::endl;
-	std::cout << a << std::endl;
+	Point	inside(0.2f, 0.3f);
+	std::cout << "inside: " << bsp(a, b, c, inside) << std::endl;
 
-	std::cout << b << std::endl;
+	Point	outside(0.8f, 0.9f);
+	std::cout << "outside: " << bsp(a, b, c, outside) << std::endl;
 
-	std::cout << Fixed::max(a, b) << std::endl;
+	Point	edge(0.5f, 0.0f);
+	std::cout << "edge: " << bsp(a, b, c, edge) << std::endl;
+
+	std::cout << "vertex: " << bsp(a, b, c, a) << std::endl;
 
 	return (0);
 }
